@@ -14,6 +14,11 @@ cd leo
 chmod +x build.sh && ./build.sh
 ```
 
+**One-liner:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/yuricmartins/leo/main/install.sh | bash
+```
+
 **Requirements:** macOS 13+ and Xcode Command Line Tools (`xcode-select --install`).
 
 ## Uninstall
