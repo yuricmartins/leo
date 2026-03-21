@@ -35,9 +35,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         updateDisplay()
         setupMenu()
-        timer = Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { [weak self] _ in
+        scheduleNextMidnightRefresh()
+    }
+
+    func scheduleNextMidnightRefresh() {
+        let cal = Calendar.current
+        guard let tomorrow = cal.date(byAdding: .day, value: 1, to: cal.startOfDay(for: Date())) else { return }
+        let interval = tomorrow.timeIntervalSinceNow + 1
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { [weak self] _ in
             self?.updateDisplay()
             self?.setupMenu()
+            self?.scheduleNextMidnightRefresh()
         }
         RunLoop.main.add(timer!, forMode: .common)
     }
