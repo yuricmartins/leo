@@ -36,6 +36,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         updateDisplay()
         setupMenu()
         scheduleNextMidnightRefresh()
+        
+        // Also refresh when Mac wakes from sleep or app resumes
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didWakeNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            self?.updateDisplay()
+            self?.setupMenu()
+            self?.scheduleNextMidnightRefresh()
+        }
+        DistributedNotificationCenter.default().addObserver(
+            forName: NSNotification.Name("com.apple.screenIsUnlocked"), object: nil, queue: .main
+        ) { [weak self] _ in
+            self?.updateDisplay()
+            self?.setupMenu()
+            self?.scheduleNextMidnightRefresh()
+        }
     }
 
     func scheduleNextMidnightRefresh() {
